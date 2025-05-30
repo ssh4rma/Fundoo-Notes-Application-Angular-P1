@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { TaskComponent } from '../task/task.component';
 import { NewTaskComponent } from './new-task/new-task.component';
 import { NewTaskData, Task } from '../task/task.model';
@@ -36,6 +37,20 @@ export class TasksComponent {
 
   deletedTask: Task[] = [];
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)) {
+      const savedTasks = localStorage.getItem('tasks');
+      if (savedTasks) {
+        this.tasks = JSON.parse(savedTasks);
+      }
+
+      const savedDeletedTasks = localStorage.getItem('deletedTask');
+      if (savedDeletedTasks) {
+        this.deletedTask = JSON.parse(savedDeletedTasks);
+      }
+    }
+  }
+
   onCompleteTask(id: string): void {
     this.tasks = this.tasks.filter((task) => task.id !== id);
   }
@@ -57,6 +72,7 @@ export class TasksComponent {
       dueDate: taskData.date,
     });
     this.isAddingTask = false;
+    this.saveTask();
   }
 
   onDeleteTask(id: string): void {
@@ -65,6 +81,7 @@ export class TasksComponent {
       this.tasks = this.tasks.filter((task) => task.id !== id);
       this.deletedTask.push(taskToDelete);
     }
+    this.saveTask();
   }
 
   onRecoverTask(id: string): void {
@@ -72,6 +89,14 @@ export class TasksComponent {
     if (taskToRecover) {
       this.tasks.push(taskToRecover);
       this.deletedTask = this.deletedTask.filter((task) => task.id !== id);
+    }
+    this.saveTask();
+  }
+
+  private saveTask(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('tasks', JSON.stringify(this.tasks));
+      localStorage.setItem('deletedTask', JSON.stringify(this.deletedTask));
     }
   }
 }
