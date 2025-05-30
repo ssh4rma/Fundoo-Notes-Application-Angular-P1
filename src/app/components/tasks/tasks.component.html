@@ -4,18 +4,19 @@
 <app-deleted-task
   [deletedTask]="deletedTask"
   [isDialogOpen]="delSelected"
+  (recover)="onRecoverTask($event)"
 ></app-deleted-task>
 
 <section>
   <header>
-    <h2>{{ name }}'s Tasks</h2>
+    <h2>ToDo List</h2>
     <menu>
       <button (click)="onStartAddTask()">Add Tasks</button>
     </menu>
   </header>
 
   <ul>
-    @for(task of selectedUserTasks; track task.id) {
+    @for(task of tasks; track task.id) {
     <li>
       <app-task
         [task]="task"

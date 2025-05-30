@@ -11,13 +11,11 @@ import { DeletedTaskComponent } from '../deleted-task/deleted-task.component';
   styleUrl: './tasks.component.css',
 })
 export class TasksComponent {
-  @Input({ required: true }) name?: string;
-  @Input({ required: true }) userId!: string;
+  @Input({ required: true }) name!: string;
   @Input() delSelected = false;
-
   isAddingTask = false;
 
-  tasks = [
+  tasks: Task[] = [
     {
       id: 't1',
       userId: 'u1',
@@ -28,7 +26,7 @@ export class TasksComponent {
     },
     {
       id: 't2',
-      userId: 'u2',
+      userId: 'u1',
       title: 'Learn RxJS',
       summary:
         'Understand reactive programming and how to use RxJS operators effectively in Angular',
@@ -37,10 +35,6 @@ export class TasksComponent {
   ];
 
   deletedTask: Task[] = [];
-
-  get selectedUserTasks() {
-    return this.tasks.filter((task) => task.userId === this.userId);
-  }
 
   onCompleteTask(id: string): void {
     this.tasks = this.tasks.filter((task) => task.id !== id);
@@ -57,7 +51,7 @@ export class TasksComponent {
   onAddTask(taskData: NewTaskData): void {
     this.tasks.push({
       id: new Date().getTime().toString(),
-      userId: this.userId,
+      userId: 'u1',
       title: taskData.title,
       summary: taskData.summary,
       dueDate: taskData.date,
@@ -65,7 +59,6 @@ export class TasksComponent {
     this.isAddingTask = false;
   }
 
-  //deleted task
   onDeleteTask(id: string): void {
     const taskToDelete = this.tasks.find((task) => task.id === id);
     if (taskToDelete) {

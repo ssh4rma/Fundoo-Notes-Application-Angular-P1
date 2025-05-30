@@ -10,6 +10,8 @@ section {
   border: solid rgb(48, 21, 165) 4px;
   border-radius: 20px;
   padding: 20px;
+  width: 800px;
+  margin-top: 0px;
 }
 
 header {
