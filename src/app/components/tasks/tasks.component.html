@@ -1,6 +1,13 @@
 @if(isAddingTask) {
 <app-new-task (cancel)="onCancelAddTask()" (add)="onAddTask($event)" />
+} @if(isEditTask) {
+<app-edit
+  [task]="selectedTask"
+  (cancel)="onCancelEditTask()"
+  (edit)="onSaveTask($event)"
+/>
 }
+
 <app-deleted-task
   [deletedTask]="deletedTask"
   [isDialogOpen]="delSelected"
@@ -22,6 +29,8 @@
         [task]="task"
         (complete)="onCompleteTask($event)"
         (delete)="onDeleteTask($event)"
+        (edit)="onEditTask($event)"
+        (editTaskData)="onEditTaskData($event)"
       />
     </li>
     }

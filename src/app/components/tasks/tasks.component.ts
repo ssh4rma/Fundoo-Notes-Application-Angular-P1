@@ -4,17 +4,25 @@ import { TaskComponent } from '../task/task.component';
 import { NewTaskComponent } from './new-task/new-task.component';
 import { NewTaskData, Task } from '../task/task.model';
 import { DeletedTaskComponent } from '../deleted-task/deleted-task.component';
+import { EditComponent } from '../edit/edit.component';
 
 @Component({
   selector: 'app-tasks',
-  imports: [TaskComponent, NewTaskComponent, DeletedTaskComponent],
+  imports: [
+    TaskComponent,
+    NewTaskComponent,
+    DeletedTaskComponent,
+    EditComponent,
+  ],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
 })
 export class TasksComponent {
   @Input({ required: true }) name!: string;
   @Input() delSelected = false;
+  isEditTask = false;
   isAddingTask = false;
+  selectedTask: Task | null = null;
 
   tasks: Task[] = [
     {
@@ -69,6 +77,7 @@ export class TasksComponent {
 
   onCompleteTask(id: string): void {
     this.tasks = this.tasks.filter((task) => task.id !== id);
+    this.saveTask();
   }
 
   onStartAddTask(): void {
@@ -77,6 +86,28 @@ export class TasksComponent {
 
   onCancelAddTask(): void {
     this.isAddingTask = false;
+  }
+
+  onCancelEditTask(): void {
+    this.isEditTask = false;
+    this.selectedTask = null;
+  }
+
+  onEditTask(isEditing: boolean): void {
+    this.isEditTask = isEditing;
+  }
+
+  onEditTaskData(task: Task): void {
+    this.selectedTask = task;
+  }
+
+  onSaveTask(editedTask: Task): void {
+    this.tasks = this.tasks.map((task) =>
+      task.id === editedTask.id ? editedTask : task
+    );
+    this.isEditTask = false;
+    this.selectedTask = null;
+    this.saveTask();
   }
 
   onAddTask(taskData: NewTaskData): void {
