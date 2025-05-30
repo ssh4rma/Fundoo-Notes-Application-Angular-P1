@@ -17,7 +17,7 @@ export class EditComponent {
     this.cancel.emit();
   }
 
-  onEdit(): void {
+  onSave(): void {
     if (this.task) {
       this.edit.emit(this.task);
     }
