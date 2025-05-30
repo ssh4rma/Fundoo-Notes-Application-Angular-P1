@@ -104,7 +104,7 @@ export class TasksComponent {
   onSaveTask(editedTask: Task): void {
     this.tasks = this.tasks.map((task) =>
       task.id === editedTask.id ? editedTask : task
-    );
+    ); //updating the old task with the newly updated one.
     this.isEditTask = false;
     this.selectedTask = null;
     this.saveTask();

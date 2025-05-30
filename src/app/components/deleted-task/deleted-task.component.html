@@ -6,7 +6,7 @@
   <ul>
     @for (task of deletedTask; track task.id) {
     <li>
-      {{ task.title }} (deleted)
+      {{ task.title }}
       <button (click)="onRecoverTask(task.id)">Recover</button>
     </li>
     }
