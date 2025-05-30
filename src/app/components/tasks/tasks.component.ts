@@ -65,6 +65,7 @@ export class TasksComponent {
     this.isAddingTask = false;
   }
 
+  //deleted task
   onDeleteTask(id: string): void {
     const taskToDelete = this.tasks.find((task) => task.id === id);
     if (taskToDelete) {
