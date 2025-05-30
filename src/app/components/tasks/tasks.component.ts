@@ -20,17 +20,33 @@ export class TasksComponent {
     {
       id: 't1',
       userId: 'u1',
-      title: 'Build Angular Project',
+      title: 'Check and Respond to Emails',
       summary:
-        'Apply Angular skills by building a full-featured project with routing, services, and components',
+        'Review inbox and reply to important messages to stay updated and communicate effectively.',
       dueDate: '15/06/25',
     },
     {
       id: 't2',
       userId: 'u1',
-      title: 'Learn RxJS',
+      title: 'Plan Daily Tasks',
       summary:
-        'Understand reactive programming and how to use RxJS operators effectively in Angular',
+        'Organize and prioritize tasks for the day to stay productive and focused.',
+      dueDate: '15/06/25',
+    },
+    {
+      id: 't3',
+      userId: 'u1',
+      title: 'Take a Break',
+      summary:
+        'Step away from work for a short period to relax and refresh your mind.',
+      dueDate: '15/06/25',
+    },
+    {
+      id: 't4',
+      userId: 'u1',
+      title: 'Review Progress',
+      summary:
+        'Reflect on completed work and prepare notes or updates for tomorrow.',
       dueDate: '15/06/25',
     },
   ];
