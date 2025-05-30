@@ -1,17 +1,20 @@
 import { Component, Input } from '@angular/core';
 import { TaskComponent } from '../task/task.component';
 import { NewTaskComponent } from './new-task/new-task.component';
-import { type NewTaskData } from '../task/task.model';
+import { NewTaskData, Task } from '../task/task.model';
+import { DeletedTaskComponent } from '../deleted-task/deleted-task.component';
 
 @Component({
   selector: 'app-tasks',
-  imports: [TaskComponent, NewTaskComponent],
+  imports: [TaskComponent, NewTaskComponent, DeletedTaskComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
 })
 export class TasksComponent {
   @Input({ required: true }) name?: string;
   @Input({ required: true }) userId!: string;
+  @Input() delSelected = false;
+
   isAddingTask = false;
 
   tasks = [
@@ -23,7 +26,6 @@ export class TasksComponent {
         'Apply Angular skills by building a full-featured project with routing, services, and components',
       dueDate: '15/06/25',
     },
-
     {
       id: 't2',
       userId: 'u2',
@@ -33,6 +35,8 @@ export class TasksComponent {
       dueDate: '15/06/25',
     },
   ];
+
+  deletedTask: Task[] = [];
 
   get selectedUserTasks() {
     return this.tasks.filter((task) => task.userId === this.userId);
@@ -61,11 +65,19 @@ export class TasksComponent {
     this.isAddingTask = false;
   }
 
-  //delete
-  onDeleteTask(taskId: string): void {
-    let newTasks = this.tasks.filter((task) => task.id === taskId);
-    this.tasks = this.tasks.filter((task) => task.id !== taskId);
+  onDeleteTask(id: string): void {
+    const taskToDelete = this.tasks.find((task) => task.id === id);
+    if (taskToDelete) {
+      this.tasks = this.tasks.filter((task) => task.id !== id);
+      this.deletedTask.push(taskToDelete);
+    }
+  }
 
-    //newTask will go to trash bin and there I have to create same list for all the del items with a recover button
+  onRecoverTask(id: string): void {
+    const taskToRecover = this.deletedTask.find((task) => task.id === id);
+    if (taskToRecover) {
+      this.tasks.push(taskToRecover);
+      this.deletedTask = this.deletedTask.filter((task) => task.id !== id);
+    }
   }
 }

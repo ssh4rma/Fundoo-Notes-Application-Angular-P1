@@ -7,6 +7,20 @@ main {
   gap: 2rem;
 }
 
+#delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border: none;
+}
+
+#delete-btn i {
+  font-size: 30px;
+}
+
 #users {
   list-style: none;
   margin: 0;

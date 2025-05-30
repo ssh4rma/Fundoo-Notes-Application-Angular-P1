@@ -1,1 +1,15 @@
-<button id="delete-btn"><i class="fa-solid fa-trash"></i>Trash</button>
+<dialog [open]="isDialogOpen">
+  <h2>Deleted Tasks</h2>
+  @if (deletedTask.length === 0) {
+  <p>No tasks have been deleted.</p>
+  } @else {
+  <ul>
+    @for (task of deletedTask; track task.id) {
+    <li>
+      {{ task.title }} (deleted)
+      <button (click)="onRecoverTask(task.id)">Recover</button>
+    </li>
+    }
+  </ul>
+  }
+</dialog>
