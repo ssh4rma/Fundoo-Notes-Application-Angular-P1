@@ -1,11 +1,43 @@
 <app-header />
 <main>
-  <app-tasks [name]="'Tasks '" [delSelected]="delSelected" />
+  <app-tasks
+    [name]="'Tasks'"
+    [delSelected]="delSelected"
+    (reminderAdded)="handleReminderAdded($event)"
+    (tasksChange)="tasks = $event"
+  ></app-tasks>
+
   <div class="trash">
     <button id="delete-btn" (click)="handleDelClick()">
       <i class="fa-solid fa-trash"></i>
     </button>
     <span>Trash</span>
   </div>
+
+  <div class="reminder">
+    <button id="reminder-btn" (click)="handleReminderClick()">
+      <i class="fa-solid fa-bell"></i>
+    </button>
+    <span>Reminder</span>
+  </div>
 </main>
+
+<dialog #reminderDialog>
+  <h2>Reminders</h2>
+
+  @if(reminderTasks.length) {
+  <ul class="reminder-list">
+    @for(task of reminderTasks; track task.id) {
+    <li>
+      <strong>{{ task.title }}</strong> — Reminder at: {{ task.reminderTime }}
+    </li>
+    }
+  </ul>
+  } @else {
+  <p>No reminders yet.</p>
+  }
+
+  <button id="dialog-close-btn" (click)="closeReminderDialog()">Close</button>
+</dialog>
+
 <router-outlet />
