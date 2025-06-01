@@ -1,0 +1,45 @@
+@if(isAddingTask) {
+<app-new-task (cancel)="onCancelAddTask()" (add)="onAddTask($event)" />
+} @if(isEditTask) {
+<app-edit
+  [task]="selectedTask"
+  (cancel)="onCancelEditTask()"
+  (edit)="onSaveTask($event)"
+/>
+} @if(isAddReminder) {
+<app-reminder
+  [task]="selectedTask"
+  (cancel)="onCancelReminderTask()"
+  (addReminder)="onAddReminderTask($event)"
+/>
+}
+
+<app-deleted-task
+  [deletedTask]="deletedTask"
+  [isDialogOpen]="delSelected"
+  (recover)="onRecoverTask($event)"
+></app-deleted-task>
+
+<section>
+  <header>
+    <h2>Notes List</h2>
+    <menu>
+      <button (click)="onStartAddTask()">Add Notes</button>
+    </menu>
+  </header>
+
+  <ul>
+    @for(task of tasks; track task.id) {
+    <li>
+      <app-task
+        [task]="task"
+        (complete)="onCompleteTask($event)"
+        (delete)="onDeleteTask($event)"
+        (edit)="onEditTask($event)"
+        (editTaskData)="onEditTaskData($event)"
+        (reminder)="onAddReminder($event)"
+      />
+    </li>
+    }
+  </ul>
+</section>
