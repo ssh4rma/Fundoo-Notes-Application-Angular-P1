@@ -6,6 +6,12 @@
   (cancel)="onCancelEditTask()"
   (edit)="onSaveTask($event)"
 />
+} @if(isAddReminder) {
+<app-reminder
+  [task]="selectedTask"
+  (cancel)="onCancelReminderTask()"
+  (addReminder)="onAddReminderTask($event)"
+/>
 }
 
 <app-deleted-task
@@ -31,6 +37,7 @@
         (delete)="onDeleteTask($event)"
         (edit)="onEditTask($event)"
         (editTaskData)="onEditTaskData($event)"
+        (reminder)="onAddReminder($event)"
       />
     </li>
     }

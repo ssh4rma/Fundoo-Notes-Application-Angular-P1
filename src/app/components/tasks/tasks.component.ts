@@ -2,9 +2,10 @@ import { Component, Input, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { TaskComponent } from '../task/task.component';
 import { NewTaskComponent } from './new-task/new-task.component';
-import { NewTaskData, Task } from '../task/task.model';
+import { NewTaskData, Task, ReminderTaskData } from '../task/task.model';
 import { DeletedTaskComponent } from '../deleted-task/deleted-task.component';
 import { EditComponent } from '../edit/edit.component';
+import { ReminderComponent } from '../reminder/reminder.component';
 
 @Component({
   selector: 'app-tasks',
@@ -13,6 +14,7 @@ import { EditComponent } from '../edit/edit.component';
     NewTaskComponent,
     DeletedTaskComponent,
     EditComponent,
+    ReminderComponent,
   ],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
@@ -22,6 +24,7 @@ export class TasksComponent {
   @Input() delSelected = false;
   isEditTask = false;
   isAddingTask = false;
+  isAddReminder = false;
   selectedTask: Task | null = null;
 
   tasks: Task[] = [
@@ -32,6 +35,8 @@ export class TasksComponent {
       summary:
         'Review inbox and reply to important messages to stay updated and communicate effectively.',
       dueDate: '15/06/25',
+      reminder: false,
+      reminderTime: null,
     },
     {
       id: 't2',
@@ -40,6 +45,8 @@ export class TasksComponent {
       summary:
         'Organize and prioritize tasks for the day to stay productive and focused.',
       dueDate: '15/06/25',
+      reminder: false,
+      reminderTime: null,
     },
     {
       id: 't3',
@@ -48,6 +55,8 @@ export class TasksComponent {
       summary:
         'Step away from work for a short period to relax and refresh your mind.',
       dueDate: '15/06/25',
+      reminder: false,
+      reminderTime: null,
     },
     {
       id: 't4',
@@ -56,6 +65,8 @@ export class TasksComponent {
       summary:
         'Reflect on completed work and prepare notes or updates for tomorrow.',
       dueDate: '15/06/25',
+      reminder: false,
+      reminderTime: null,
     },
   ];
 
@@ -104,7 +115,7 @@ export class TasksComponent {
   onSaveTask(editedTask: Task): void {
     this.tasks = this.tasks.map((task) =>
       task.id === editedTask.id ? editedTask : task
-    ); //updating the old task with the newly updated one.
+    );
     this.isEditTask = false;
     this.selectedTask = null;
     this.saveTask();
@@ -117,6 +128,8 @@ export class TasksComponent {
       title: taskData.title,
       summary: taskData.summary,
       dueDate: taskData.date,
+      reminder: false,
+      reminderTime: null,
     });
     this.isAddingTask = false;
     this.saveTask();
@@ -137,6 +150,27 @@ export class TasksComponent {
       this.tasks.push(taskToRecover);
       this.deletedTask = this.deletedTask.filter((task) => task.id !== id);
     }
+    this.saveTask();
+  }
+
+  onAddReminder(id: string): void {
+    this.isAddReminder = true;
+    this.selectedTask = this.tasks.find((task) => task.id === id) || null;
+  }
+
+  onCancelReminderTask(): void {
+    this.isAddReminder = false;
+    this.selectedTask = null;
+  }
+
+  onAddReminderTask(reminderData: ReminderTaskData): void {
+    this.tasks = this.tasks.map((task) =>
+      task.id === reminderData.taskId
+        ? { ...task, reminder: true, reminderTime: reminderData.reminderTime }
+        : task
+    );
+    this.isAddReminder = false;
+    this.selectedTask = null;
     this.saveTask();
   }
 

@@ -12,8 +12,10 @@ export class TaskComponent {
   @Output() delete = new EventEmitter<string>();
   @Output() edit = new EventEmitter<boolean>();
   @Output() editTaskData = new EventEmitter<Task>();
+  @Output() reminder = new EventEmitter<string>();
 
   isEditTask = false;
+  AddReminder = false;
 
   onCompleteTask(): void {
     this.complete.emit(this.task.id);
@@ -27,5 +29,9 @@ export class TaskComponent {
     this.isEditTask = true;
     this.edit.emit(this.isEditTask);
     this.editTaskData.emit(this.task);
+  }
+
+  onAddReminder(): void {
+    this.reminder.emit(this.task.id);
   }
 }

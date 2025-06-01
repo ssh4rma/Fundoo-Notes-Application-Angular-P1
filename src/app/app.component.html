@@ -1,8 +1,11 @@
 <app-header />
 <main>
   <app-tasks [name]="'Tasks '" [delSelected]="delSelected" />
-  <button id="delete-btn" (click)="handleDelClick()">
-    <i class="fa-solid fa-trash"></i>
-  </button>
+  <div class="trash">
+    <button id="delete-btn" (click)="handleDelClick()">
+      <i class="fa-solid fa-trash"></i>
+    </button>
+    <span>Trash</span>
+  </div>
 </main>
 <router-outlet />

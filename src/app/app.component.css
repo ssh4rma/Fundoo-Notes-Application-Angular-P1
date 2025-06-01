@@ -7,18 +7,26 @@ main {
   gap: 2rem;
 }
 
-#delete-btn {
+.trash {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  display: flex;
+  top: 200px;
+  left: 10px;
   width: 50px;
   height: 50px;
-  background-color: transparent;
   border: none;
 }
 
-#delete-btn i {
+.trash span {
+  margin-top: 15px;
+  margin-left: 15px;
+  color: black;
+}
+
+#delete-btn {
   font-size: 30px;
+  background-color: transparent;
+  border: none;
 }
 
 #users {

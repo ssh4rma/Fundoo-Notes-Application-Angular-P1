@@ -23,6 +23,7 @@ export class NewTaskComponent {
       title: this.enteredTitle,
       summary: this.enteredSummary,
       date: this.enteredDate,
+      reminder: false,
     });
   }
 }
