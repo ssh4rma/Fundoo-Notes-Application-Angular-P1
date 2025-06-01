@@ -51,6 +51,33 @@ export class TasksComponent {
       reminder: false,
       reminderTime: null,
     },
+    {
+      id: 't2',
+      userId: 'u1',
+      title: 'Grocery Shopping',
+      summary: 'Buy essentials like fruits, vegetables, and dairy products.',
+      dueDate: '2025-06-10',
+      reminder: true,
+      reminderTime: '2025-06-10T17:00:00',
+    },
+    {
+      id: 't3',
+      userId: 'u1',
+      title: 'Workout Session',
+      summary: 'Complete a 30-minute cardio and strength training routine.',
+      dueDate: '2025-06-09',
+      reminder: true,
+      reminderTime: '2025-06-09T07:00:00',
+    },
+    {
+      id: 't4',
+      userId: 'u1',
+      title: 'Clean the House',
+      summary: 'Vacuum, dust, and organize the living room and kitchen.',
+      dueDate: '2025-06-11',
+      reminder: false,
+      reminderTime: null,
+    },
   ];
 
   deletedTask: Task[] = [];
