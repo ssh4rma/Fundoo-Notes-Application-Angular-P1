@@ -1,11 +1,24 @@
+@if(!isLoggedIn) { @if(authMode === 'login') {
+<app-login
+  (loginSuccess)="onLogin($event)"
+  (switchToSignup)="switchToSignup()"
+/>
+} @else {
+<app-signup
+  (signupSuccess)="onSignup($event)"
+  (switchToLogin)="switchToLogin()"
+/>
+} } @else {
+
 <app-header />
+
 <main>
   <app-tasks
     [name]="'Tasks'"
     [delSelected]="delSelected"
     (reminderAdded)="handleReminderAdded($event)"
-    (tasksChange)="tasks = $event"
-  ></app-tasks>
+    (tasksChange)="updateTasks($event)"
+  />
 
   <div class="trash">
     <button id="delete-btn" (click)="handleDelClick()">
@@ -29,7 +42,7 @@
   <ul class="reminder-list">
     @for(task of reminderTasks; track task.id) {
     <li>
-      <strong>{{ task.title }}</strong> — Reminder at: {{ task.reminderTime }}
+      <strong>{{ task.title }}</strong> — {{ task.reminderTime }}
     </li>
     }
   </ul>
@@ -41,3 +54,4 @@
 </dialog>
 
 <router-outlet />
+}

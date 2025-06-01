@@ -1,0 +1,21 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 320px;
+  margin: 4rem auto;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+label {
+  display: flex;
+  flex-direction: column;
+}
+button {
+  padding: 0.5rem 1rem;
+}
+p.secondary {
+  text-align: center;
+  font-size: 0.9rem;
+}
