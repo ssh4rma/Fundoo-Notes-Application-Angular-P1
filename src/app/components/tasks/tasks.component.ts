@@ -1,13 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  Inject,
-  PLATFORM_ID,
-} from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Task, NewTaskData, ReminderTaskData } from '../task/task.model';
 
 import { TaskComponent } from '../task/task.component';
@@ -15,6 +6,8 @@ import { NewTaskComponent } from './new-task/new-task.component';
 import { DeletedTaskComponent } from '../deleted-task/deleted-task.component';
 import { EditComponent } from '../edit/edit.component';
 import { ReminderComponent } from '../reminder/reminder.component';
+
+import { NotesService } from '../../services/notes.service';
 
 @Component({
   selector: 'app-tasks',
@@ -29,7 +22,7 @@ import { ReminderComponent } from '../reminder/reminder.component';
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
 })
-export class TasksComponent {
+export class TasksComponent implements OnInit {
   @Input({ required: true }) name!: string;
   @Input() delSelected = false;
   @Output() reminderAdded = new EventEmitter<Task>();
@@ -41,55 +34,25 @@ export class TasksComponent {
 
   selectedTask: Task | null = null;
 
-  tasks: Task[] = [
-    {
-      id: 't1',
-      userId: 'u1',
-      title: 'Check and Respond to Emails',
-      summary: 'Review inbox and reply to important messages.',
-      dueDate: '2025-06-15',
-      reminder: false,
-      reminderTime: null,
-    },
-    {
-      id: 't2',
-      userId: 'u1',
-      title: 'Grocery Shopping',
-      summary: 'Buy essentials like fruits, vegetables, and dairy products.',
-      dueDate: '2025-06-10',
-      reminder: true,
-      reminderTime: '2025-06-10T17:00:00',
-    },
-    {
-      id: 't3',
-      userId: 'u1',
-      title: 'Workout Session',
-      summary: 'Complete a 30-minute cardio and strength training routine.',
-      dueDate: '2025-06-09',
-      reminder: true,
-      reminderTime: '2025-06-09T07:00:00',
-    },
-    {
-      id: 't4',
-      userId: 'u1',
-      title: 'Clean the House',
-      summary: 'Vacuum, dust, and organize the living room and kitchen.',
-      dueDate: '2025-06-11',
-      reminder: false,
-      reminderTime: null,
-    },
-  ];
-
+  tasks: Task[] = [];
   deletedTask: Task[] = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    if (isPlatformBrowser(this.platformId)) {
-      const savedTasks = localStorage.getItem('tasks');
-      if (savedTasks) this.tasks = JSON.parse(savedTasks);
+  constructor(private notesService: NotesService) {}
 
-      const savedDeleted = localStorage.getItem('deletedTask');
-      if (savedDeleted) this.deletedTask = JSON.parse(savedDeleted);
-    }
+  ngOnInit() {
+    this.loadTasksFromAPI();
+  }
+
+  loadTasksFromAPI() {
+    this.notesService.getNotes().subscribe({
+      next: (res: any) => {
+        this.tasks = res.data?.data || [];
+        this.tasksChange.emit(this.tasks);
+      },
+      error: (err) => {
+        console.error('Failed to load tasks from API:', err);
+      },
+    });
   }
 
   onStartAddTask() {
@@ -101,7 +64,7 @@ export class TasksComponent {
   }
 
   onAddTask(data: NewTaskData) {
-    this.tasks.push({
+    const newTask: Task = {
       id: Date.now().toString(),
       userId: 'u1',
       title: data.title,
@@ -109,9 +72,9 @@ export class TasksComponent {
       dueDate: data.date,
       reminder: false,
       reminderTime: null,
-    });
+    };
+    this.tasks.push(newTask);
     this.isAddingTask = false;
-    this.saveTask();
     this.tasksChange.emit(this.tasks);
   }
 
@@ -127,7 +90,6 @@ export class TasksComponent {
     this.tasks = this.tasks.map((t) => (t.id === edited.id ? edited : t));
     this.isEditTask = false;
     this.selectedTask = null;
-    this.saveTask();
     this.tasksChange.emit(this.tasks);
   }
 
@@ -136,7 +98,6 @@ export class TasksComponent {
     if (t) {
       this.tasks = this.tasks.filter((x) => x.id !== id);
       this.deletedTask.push(t);
-      this.saveTask();
       this.tasksChange.emit(this.tasks);
     }
   }
@@ -146,14 +107,12 @@ export class TasksComponent {
     if (t) {
       this.tasks.push(t);
       this.deletedTask = this.deletedTask.filter((x) => x.id !== id);
-      this.saveTask();
       this.tasksChange.emit(this.tasks);
     }
   }
 
   onCompleteTask(id: string) {
     this.tasks = this.tasks.filter((t) => t.id !== id);
-    this.saveTask();
     this.tasksChange.emit(this.tasks);
   }
 
@@ -179,19 +138,11 @@ export class TasksComponent {
 
     this.isAddReminder = false;
     this.selectedTask = null;
-    this.saveTask();
     this.tasksChange.emit(this.tasks);
   }
 
-  onCancelEditTask(): void {
+  onCancelEditTask() {
     this.isEditTask = false;
     this.selectedTask = null;
-  }
-
-  private saveTask() {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('tasks', JSON.stringify(this.tasks));
-      localStorage.setItem('deletedTask', JSON.stringify(this.deletedTask));
-    }
   }
 }

@@ -1,11 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
 import { HeaderComponent } from './components/header/header.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
-
 import { Task } from './components/task/task.model';
 
 type AuthMode = 'login' | 'signup';
@@ -36,9 +34,11 @@ export class AppComponent {
   }
 
   @ViewChild('reminderDialog') dialog!: ElementRef<HTMLDialogElement>;
+
   openReminderDialog() {
     this.dialog?.nativeElement.showModal();
   }
+
   closeReminderDialog() {
     this.dialog?.nativeElement.close();
   }
@@ -46,25 +46,29 @@ export class AppComponent {
   handleDelClick() {
     this.delSelected = !this.delSelected;
   }
+
   handleReminderClick() {
     this.delSelected = false;
     this.openReminderDialog();
   }
 
-  onLogin(u: { email: string }) {
-    this.finishAuth(u);
+  onLogin(user: { email: string }) {
+    this.finishAuth(user);
   }
-  onSignup(u: { email: string }) {
-    this.finishAuth(u);
+
+  onSignup(user: { email: string }) {
+    this.finishAuth(user);
   }
-  finishAuth(u: { email: string }) {
+
+  finishAuth(user: { email: string }) {
     this.isLoggedIn = true;
-    this.currentEmail = u.email;
+    this.currentEmail = user.email;
   }
 
   switchToSignup() {
     this.authMode = 'signup';
   }
+
   switchToLogin() {
     this.authMode = 'login';
   }
@@ -74,6 +78,7 @@ export class AppComponent {
       t.id === task.id ? { ...t, reminderTime: task.reminderTime } : t
     );
   }
+
   updateTasks(tasks: Task[]) {
     this.tasks = tasks;
   }

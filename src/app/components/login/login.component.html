@@ -1,20 +1,17 @@
-<form (ngSubmit)="onSubmit()">
+<div class="auth-form">
   <h2>Login</h2>
-
-  <label>
-    Email:
+  <form (ngSubmit)="onLogin()">
+    <label>Email:</label>
     <input type="email" [(ngModel)]="email" name="email" required />
-  </label>
 
-  <label>
-    Password:
+    <label>Password:</label>
     <input type="password" [(ngModel)]="password" name="password" required />
-  </label>
 
-  <button type="submit">Login</button>
+    <button type="submit">Login</button>
+  </form>
 
-  <p class="secondary">
-    Don’t have an account?
-    <a href="#" (click)="goToSignup(); $event.preventDefault()">Sign up here</a>
+  <p>
+    Don't have an account?
+    <a href="#" (click)="switchToSignup.emit()">Sign up</a>
   </p>
-</form>
+</div>

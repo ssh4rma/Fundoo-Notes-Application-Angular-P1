@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -6,23 +7,38 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css',
+  styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent {
+  firstName = '';
+  lastName = '';
   email = '';
   password = '';
-  confirmPassword = '';
 
   @Output() signupSuccess = new EventEmitter<{ email: string }>();
   @Output() switchToLogin = new EventEmitter<void>();
 
-  onSubmit() {
-    if (this.email && this.password && this.password === this.confirmPassword) {
-      this.signupSuccess.emit({ email: this.email });
-    }
-  }
+  constructor(private http: HttpClient) {}
 
-  goToLogin() {
-    this.switchToLogin.emit();
+  onSignup() {
+    this.http
+      .post(
+        'https://fundoonotes.incubation.bridgelabz.com/api/user/userSignUp',
+        {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          password: this.password,
+          service: 'advance',
+        }
+      )
+      .subscribe({
+        next: () => {
+          this.signupSuccess.emit({ email: this.email });
+        },
+        error: () => {
+          alert('Signup failed');
+        },
+      });
   }
 }
